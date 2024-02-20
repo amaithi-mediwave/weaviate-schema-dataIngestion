@@ -1,0 +1,42 @@
+---
+version: '3.4'
+services:
+  weaviate:
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    image: semitechnologies/weaviate:1.23.3
+    ports:
+    - 8080:8080
+    - 50051:50051
+    volumes:
+    - weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    environment:
+      GPT4ALL_INFERENCE_API: 'http://t2v-gpt4all:8080'
+      SPELLCHECK_INFERENCE_API: 'http://text-spellcheck:8080'
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-gpt4all'
+      ENABLE_MODULES: 'text2vec-gpt4all,text-spellcheck'
+      CLUSTER_HOSTNAME: 'node1'
+
+  text-spellcheck:
+    image: semitechnologies/text-spellcheck-model:pyspellchecker-en
+    
+  t2v-gpt4all:
+    image: semitechnologies/gpt4all-inference:all-MiniLM-L6-v2
+
+  redis-memory:
+    image: redis/redis-stack
+    ports:
+    - 6379:6379
+    - 8001:8001
+volumes:
+  weaviate_data:
+...

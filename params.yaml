@@ -1,0 +1,28 @@
+
+dataIngestion:
+
+  chunk_size : 1000
+  chunk_overlap: 150
+
+
+
+
+  website:  "https://www.mediwavedigital.com/"
+
+  data:
+    directory_path: "/data/"
+
+  # file_extensions: ['.docx', '.pdf', '.txt' ]
+  file_extensions: []
+
+  weaviate:
+    weaviate_url: "http://localhost:8080"
+    class_name: "GRP"
+    property: 'content'
+
+  batch_config:
+    batch_size : 10
+    dynamic: True
+    timeout_retries: 3
+
+    
